@@ -37,9 +37,9 @@ npm install angular-temporal @js-temporal/polyfill
 
 This package requires the following peer dependencies:
 
-- `@angular/common`: ^19.0.0 || ^20.0.0
-- `@angular/core`: ^19.0.0 || ^20.0.0  
-- `@angular/forms`: ^19.0.0 || ^20.0.0
+- `@angular/common`: ^19.0.0 || ^20.0.0 || ^21.0.0
+- `@angular/core`: ^19.0.0 || ^20.0.0 || ^21.0.0  
+- `@angular/forms`: ^19.0.0 || ^20.0.0 || ^21.0.0
 - `@js-temporal/polyfill`: ^0.4.0
 
 ## 🎯 Quick Start
