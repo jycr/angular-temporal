@@ -1,8 +1,8 @@
 import { computed, Injectable, signal } from '@angular/core';
 
 import {
-    TemporalComparisonResult, TemporalFormatOptions, TemporalFormValue, TemporalRange,
-    TemporalServiceConfig, TemporalValidationResult
+  TemporalComparisonResult, TemporalFormatOptions, TemporalFormValue, TemporalRange,
+  TemporalServiceConfig, TemporalValidationResult
 } from '../types/temporal.types';
 import { Temporal, temporalPolyfill } from '../utils/polyfill';
 
@@ -24,7 +24,7 @@ export class TemporalService {
     if (!temporalPolyfill.isAvailable()) {
       console.warn('Temporal polyfill is not available. Some features may not work correctly.');
     }
-    
+
     const validation = temporalPolyfill.validateFeatures();
     if (!validation.isValid) {
       console.warn('Missing Temporal features:', validation.missingFeatures);
@@ -47,11 +47,22 @@ export class TemporalService {
   } {
     return {
       instant: () => Temporal.Now.instant(),
-      plainDate: () => Temporal.Now.plainDate(this.defaultCalendar()),
+      plainDate: () => {
+        const calendar = this.defaultCalendar();
+        const date = Temporal.Now.plainDateISO();
+        return calendar !== 'iso8601' ? date.withCalendar(calendar) : date;
+      },
       plainTime: () => Temporal.Now.plainTimeISO(),
-      plainDateTime: () => Temporal.Now.plainDateTime(this.defaultCalendar()),
-      zonedDateTime: (timezone = this.defaultTimezone()) => 
-        Temporal.Now.zonedDateTime(this.defaultCalendar(), timezone)
+      plainDateTime: () => {
+        const calendar = this.defaultCalendar();
+        const dt = Temporal.Now.plainDateTimeISO();
+        return calendar !== 'iso8601' ? dt.withCalendar(calendar) : dt;
+      },
+      zonedDateTime: (timezone = this.defaultTimezone()) => {
+        const calendar = this.defaultCalendar();
+        const zdt = Temporal.Now.zonedDateTimeISO(timezone);
+        return calendar !== 'iso8601' ? zdt.withCalendar(calendar) : zdt;
+      }
     };
   }
 
@@ -104,15 +115,17 @@ export class TemporalService {
   toZonedDateTime(value: string | Date | number | Temporal.ZonedDateTime, timezone?: string): Temporal.ZonedDateTime {
     const tz = timezone || this.defaultTimezone();
     const calendar = this.defaultCalendar();
-    
+
     if (value instanceof Temporal.ZonedDateTime) {
       return value.withTimeZone(tz);
     }
     if (value instanceof Date) {
-      return Temporal.Instant.fromEpochMilliseconds(value.getTime()).toZonedDateTime({ timeZone: tz, calendar });
+      const zdt = Temporal.Instant.fromEpochMilliseconds(value.getTime()).toZonedDateTimeISO(tz);
+      return calendar !== 'iso8601' ? zdt.withCalendar(calendar) : zdt;
     }
     if (typeof value === 'number') {
-      return Temporal.Instant.fromEpochMilliseconds(value).toZonedDateTime({ timeZone: tz, calendar });
+      const zdt = Temporal.Instant.fromEpochMilliseconds(value).toZonedDateTimeISO(tz);
+      return calendar !== 'iso8601' ? zdt.withCalendar(calendar) : zdt;
     }
     return Temporal.ZonedDateTime.from(`${value}[${tz}]`);
   }
@@ -235,7 +248,7 @@ export class TemporalService {
 
   validate(value: any, type: 'date' | 'time' | 'datetime'): TemporalValidationResult {
     const errors: string[] = [];
-    
+
     try {
       switch (type) {
         case 'date':
@@ -271,7 +284,7 @@ export class TemporalService {
     locale?: string
   ): string {
     const formatLocale = locale || this.defaultLocale();
-    
+
     if (value instanceof Temporal.PlainDate) {
       return value.toLocaleString(formatLocale, options);
     }
@@ -287,13 +300,21 @@ export class TemporalService {
     if (value instanceof Temporal.Duration) {
       return value.toString();
     }
-    
+
     return String(value);
   }
 
   startOfDay(date: Temporal.PlainDate | Temporal.PlainDateTime | Temporal.ZonedDateTime): Temporal.PlainDateTime | Temporal.ZonedDateTime {
     if (date instanceof Temporal.PlainDate) {
-      return date.toPlainDateTime({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+      return Temporal.PlainDateTime.from({
+        year: date.year,
+        month: date.month,
+        day: date.day,
+        hour: 0,
+        minute: 0,
+        second: 0,
+        millisecond: 0
+      });
     }
     if (date instanceof Temporal.PlainDateTime) {
       return date.with({ hour: 0, minute: 0, second: 0, millisecond: 0 });
@@ -306,7 +327,15 @@ export class TemporalService {
 
   endOfDay(date: Temporal.PlainDate | Temporal.PlainDateTime | Temporal.ZonedDateTime): Temporal.PlainDateTime | Temporal.ZonedDateTime {
     if (date instanceof Temporal.PlainDate) {
-      return date.toPlainDateTime({ hour: 23, minute: 59, second: 59, millisecond: 999 });
+      return Temporal.PlainDateTime.from({
+        year: date.year,
+        month: date.month,
+        day: date.day,
+        hour: 23,
+        minute: 59,
+        second: 59,
+        millisecond: 999
+      });
     }
     if (date instanceof Temporal.PlainDateTime) {
       return date.with({ hour: 23, minute: 59, second: 59, millisecond: 999 });
@@ -358,7 +387,19 @@ export class TemporalService {
     toTimezone: string
   ): Temporal.ZonedDateTime {
     if (date instanceof Temporal.PlainDateTime) {
-      return date.toZonedDateTime(fromTimezone).withTimeZone(toTimezone);
+      const zonedInFrom = Temporal.ZonedDateTime.from({
+        year: date.year,
+        month: date.month,
+        day: date.day,
+        hour: date.hour,
+        minute: date.minute,
+        second: date.second,
+        millisecond: date.millisecond,
+        microsecond: date.microsecond,
+        nanosecond: date.nanosecond,
+        timeZone: fromTimezone
+      });
+      return zonedInFrom.withTimeZone(toTimezone);
     }
     return date.withTimeZone(toTimezone);
   }

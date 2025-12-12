@@ -6,10 +6,10 @@ import { TemporalService } from '../../services/temporal.service';
 import { TemporalPickerConfig } from '../../types/temporal.types';
 import { Temporal } from '../../utils/polyfill';
 import {
-    TemporalDatePickerComponent
+  TemporalDatePickerComponent
 } from '../temporal-date-picker/temporal-date-picker.component';
 import {
-    TemporalTimePickerComponent
+  TemporalTimePickerComponent
 } from '../temporal-time-picker/temporal-time-picker.component';
 
 @Component({
@@ -100,8 +100,8 @@ export class TemporalDateTimePickerComponent implements ControlValueAccessor, On
   selectedDate: Temporal.PlainDate | null = null;
   selectedTime: Temporal.PlainTime | null = null;
 
-  private onChange = (value: Temporal.PlainDateTime | null) => {};
-  private onTouched = () => {};
+  private onChange = (value: Temporal.PlainDateTime | null) => { };
+  private onTouched = () => { };
 
   ngOnInit(): void {
     this.config = {
@@ -139,7 +139,17 @@ export class TemporalDateTimePickerComponent implements ControlValueAccessor, On
     }
 
     try {
-      const plainDateTime = this.selectedDate.toPlainDateTime(this.selectedTime);
+      const plainDateTime = Temporal.PlainDateTime.from({
+        year: this.selectedDate.year,
+        month: this.selectedDate.month,
+        day: this.selectedDate.day,
+        hour: this.selectedTime.hour,
+        minute: this.selectedTime.minute,
+        second: this.selectedTime.second,
+        millisecond: this.selectedTime.millisecond,
+        microsecond: this.selectedTime.microsecond,
+        nanosecond: this.selectedTime.nanosecond
+      });
       this.onChange(plainDateTime);
       this.dateTimeChange.emit(plainDateTime);
     } catch (error) {

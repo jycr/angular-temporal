@@ -1527,7 +1527,15 @@ export class MeetingSchedulerComponent {
   
   get meetingDateTime(): Temporal.PlainDateTime | null {
     if (!this.meetingDate || !this.startTime) return null;
-    return this.meetingDate.toPlainDateTime(this.startTime);
+    return Temporal.PlainDateTime.from({
+      year: this.meetingDate.year,
+      month: this.meetingDate.month,
+      day: this.meetingDate.day,
+      hour: this.startTime.hour,
+      minute: this.startTime.minute,
+      second: this.startTime.second,
+      millisecond: this.startTime.millisecond
+    });
   }
   
   get endDateTime(): Temporal.PlainDateTime | null {
@@ -1537,7 +1545,16 @@ export class MeetingSchedulerComponent {
   
   get zonedMeetingTime(): Temporal.ZonedDateTime | null {
     if (!this.meetingDateTime) return null;
-    return this.meetingDateTime.toZonedDateTime('UTC');
+    return Temporal.ZonedDateTime.from({
+      year: this.meetingDateTime.year,
+      month: this.meetingDateTime.month,
+      day: this.meetingDateTime.day,
+      hour: this.meetingDateTime.hour,
+      minute: this.meetingDateTime.minute,
+      second: this.meetingDateTime.second,
+      millisecond: this.meetingDateTime.millisecond,
+      timeZone: 'UTC'
+    });
   }
   
   onDateChange(date: Temporal.PlainDate | null) {

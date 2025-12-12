@@ -85,7 +85,7 @@ export class TemporalPolyfill {
    */
   public getAvailableFeatures(): string[] {
     const features: string[] = [];
-    
+
     if (this.isFeatureSupported('Now')) features.push('Now');
     if (this.isFeatureSupported('PlainDate')) features.push('PlainDate');
     if (this.isFeatureSupported('PlainTime')) features.push('PlainTime');
@@ -93,11 +93,10 @@ export class TemporalPolyfill {
     if (this.isFeatureSupported('ZonedDateTime')) features.push('ZonedDateTime');
     if (this.isFeatureSupported('Instant')) features.push('Instant');
     if (this.isFeatureSupported('Duration')) features.push('Duration');
-    if (this.isFeatureSupported('Calendar')) features.push('Calendar');
-    if (this.isFeatureSupported('TimeZone')) features.push('TimeZone');
     if (this.isFeatureSupported('PlainYearMonth')) features.push('PlainYearMonth');
     if (this.isFeatureSupported('PlainMonthDay')) features.push('PlainMonthDay');
-    
+    // Note: Calendar and TimeZone removed in v0.5.0
+
     return features;
   }
 
@@ -106,13 +105,14 @@ export class TemporalPolyfill {
    */
   public validateFeatures(): { isValid: boolean; missingFeatures: string[] } {
     const requiredFeatures = [
-      'Now', 'PlainDate', 'PlainTime', 'PlainDateTime', 
-      'ZonedDateTime', 'Instant', 'Duration', 'Calendar', 'TimeZone'
+      'Now', 'PlainDate', 'PlainTime', 'PlainDateTime',
+      'ZonedDateTime', 'Instant', 'Duration'
+      // Note: Calendar and TimeZone removed in v0.5.0 - use string identifiers instead
     ];
-    
+
     const availableFeatures = this.getAvailableFeatures();
     const missingFeatures = requiredFeatures.filter(feature => !availableFeatures.includes(feature));
-    
+
     return {
       isValid: missingFeatures.length === 0,
       missingFeatures

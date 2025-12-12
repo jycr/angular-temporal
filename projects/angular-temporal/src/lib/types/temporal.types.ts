@@ -11,10 +11,12 @@ export type PlainDateTime = Temporal.PlainDateTime;
 export type ZonedDateTime = Temporal.ZonedDateTime;
 export type Instant = Temporal.Instant;
 export type Duration = Temporal.Duration;
-export type Calendar = Temporal.Calendar;
-export type TimeZone = Temporal.TimeZone;
+// Note: Temporal.Calendar removed in v0.5.0 - use string identifiers instead
+export type CalendarId = string;
 export type PlainYearMonth = Temporal.PlainYearMonth;
 export type PlainMonthDay = Temporal.PlainMonthDay;
+// Note: Temporal.TimeZone removed in v0.5.0 - use string identifiers instead
+export type TimeZoneId = string;
 
 export type { TemporalFormatOptions, TemporalFormatPresetKey };
 
@@ -64,12 +66,12 @@ export interface TemporalValidationResult {
   errors: string[];
 }
 
-export type TemporalFormValue = 
-  | Temporal.PlainDate 
-  | Temporal.PlainTime 
-  | Temporal.PlainDateTime 
-  | Temporal.ZonedDateTime 
-  | null 
+export type TemporalFormValue =
+  | Temporal.PlainDate
+  | Temporal.PlainTime
+  | Temporal.PlainDateTime
+  | Temporal.ZonedDateTime
+  | null
   | undefined;
 
 export interface TemporalFormControl {
@@ -99,7 +101,7 @@ export interface TemporalComponentConfig {
   customClasses: Signal<Record<string, string> | undefined>;
   customDateClasses: Signal<Record<string, string> | undefined>;
   customTimeClasses: Signal<Record<string, string> | undefined>;
-  
+
   valueChange: Signal<(value: any) => void>;
   dateChange: Signal<(value: PlainDate | null) => void>;
   timeChange: Signal<(value: PlainTime | null) => void>;

@@ -23,10 +23,12 @@ export class TemporalInstantPipe implements PipeTransform {
 
     try {
       const instant = this.temporalService.toInstant(value);
-      const zonedDateTime = instant.toZonedDateTime({ 
-        timeZone: timezone || this.temporalService.defaultTimezone(),
-        calendar: this.temporalService.defaultCalendar()
-      });
+      const tz = timezone || this.temporalService.defaultTimezone();
+      const calendar = this.temporalService.defaultCalendar();
+      let zonedDateTime = instant.toZonedDateTimeISO(tz);
+      if (calendar !== 'iso8601') {
+        zonedDateTime = zonedDateTime.withCalendar(calendar);
+      }
       return this.temporalService.format(zonedDateTime, options, locale);
     } catch (error) {
       console.warn('TemporalInstantPipe: Invalid instant value', error);
