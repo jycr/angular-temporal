@@ -1,7 +1,7 @@
 import {
-    TemporalComparisonResult, TemporalComponentConfig, TemporalDirectiveConfig,
+    TemporalComparisonResult,
     TemporalFormatOptions, TemporalFormValue, TemporalInputConfig, TemporalPickerConfig,
-    TemporalPipeConfig, TemporalRange, TemporalServiceConfig, TemporalSignalConfig,
+    TemporalRange, TemporalServiceConfig,
     TemporalValidationResult
 } from './temporal.types';
 
@@ -36,7 +36,7 @@ describe('Temporal Types', () => {
         isBefore: true,
         isAfter: false,
         isEqual: false,
-        difference: {} as any // Mock duration for testing
+        difference: {} as never // Mock duration for testing
       };
       expect(result.isBefore).toBe(true);
       expect(result.isAfter).toBe(false);
@@ -48,8 +48,8 @@ describe('Temporal Types', () => {
   describe('TemporalRange', () => {
     it('should have correct structure', () => {
       const range: TemporalRange = {
-        start: {} as any, // Mock Temporal object
-        end: {} as any    // Mock Temporal object
+        start: {} as never, // Mock Temporal object
+        end: {} as never    // Mock Temporal object
       };
       expect(range.start).toBeDefined();
       expect(range.end).toBeDefined();
@@ -69,7 +69,7 @@ describe('Temporal Types', () => {
 
   describe('TemporalFormValue', () => {
     it('should have correct structure', () => {
-      const value: TemporalFormValue = {} as any; // Mock Temporal object
+      const value: TemporalFormValue = {} as never; // Mock Temporal object
       expect(value).toBeDefined();
     });
   });

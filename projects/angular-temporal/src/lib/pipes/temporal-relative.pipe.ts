@@ -1,4 +1,4 @@
-import { inject, input, Pipe, PipeTransform } from '@angular/core';
+import { inject, Pipe, PipeTransform } from '@angular/core';
 
 import { TemporalService } from '../services/temporal.service';
 import { Temporal } from '../utils/polyfill';
@@ -21,9 +21,9 @@ export class TemporalRelativePipe implements PipeTransform {
     try {
       const targetDate = this.temporalService.toPlainDate(value);
       const refDate = referenceDate ? this.temporalService.toPlainDate(referenceDate) : this.temporalService.now().plainDate();
-      
+
       const daysDiff = this.temporalService.differenceInDays(targetDate, refDate);
-      
+
       if (daysDiff === 0) {
         return 'Today';
       } else if (daysDiff === 1) {

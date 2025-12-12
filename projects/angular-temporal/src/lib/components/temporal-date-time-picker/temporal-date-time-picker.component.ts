@@ -28,7 +28,7 @@ import {
           [customClasses]="customDateClasses"
           (dateChange)="onDateChange($event)">
         </temporal-date-picker>
-        
+
         <temporal-time-picker
           [(ngModel)]="selectedTime"
           [showSeconds]="showSeconds"
@@ -47,13 +47,13 @@ import {
       flex-direction: column;
       gap: 1rem;
     }
-    
+
     .date-time-container {
       display: flex;
       gap: 1rem;
       align-items: flex-start;
     }
-    
+
     @media (max-width: 768px) {
       .date-time-container {
         flex-direction: column;
@@ -100,8 +100,8 @@ export class TemporalDateTimePickerComponent implements ControlValueAccessor, On
   selectedDate: Temporal.PlainDate | null = null;
   selectedTime: Temporal.PlainTime | null = null;
 
-  private onChange = (value: Temporal.PlainDateTime | null) => {};
-  private onTouched = () => {};
+  private onChange: (value: Temporal.PlainDateTime | null) => void = () => { /* empty */ };
+  private onTouched = () => { /* empty */ };
 
   ngOnInit(): void {
     this.config = {
@@ -169,6 +169,7 @@ export class TemporalDateTimePickerComponent implements ControlValueAccessor, On
     this.onTouched = fn;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setDisabledState(isDisabled: boolean): void {
     // TODO: Implement disabled state if needed
   }

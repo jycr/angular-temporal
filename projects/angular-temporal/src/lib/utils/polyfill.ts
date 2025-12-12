@@ -53,7 +53,7 @@ export class TemporalPolyfill {
   public getVersion(): string {
     try {
       // Try to get version from the polyfill if available
-      return (this.temporal as any).version || 'unknown';
+      return (this.temporal as never)['version'] || 'unknown';
     } catch {
       return 'unknown';
     }
@@ -85,7 +85,7 @@ export class TemporalPolyfill {
    */
   public getAvailableFeatures(): string[] {
     const features: string[] = [];
-    
+
     if (this.isFeatureSupported('Now')) features.push('Now');
     if (this.isFeatureSupported('PlainDate')) features.push('PlainDate');
     if (this.isFeatureSupported('PlainTime')) features.push('PlainTime');
@@ -97,7 +97,7 @@ export class TemporalPolyfill {
     if (this.isFeatureSupported('TimeZone')) features.push('TimeZone');
     if (this.isFeatureSupported('PlainYearMonth')) features.push('PlainYearMonth');
     if (this.isFeatureSupported('PlainMonthDay')) features.push('PlainMonthDay');
-    
+
     return features;
   }
 
@@ -106,13 +106,13 @@ export class TemporalPolyfill {
    */
   public validateFeatures(): { isValid: boolean; missingFeatures: string[] } {
     const requiredFeatures = [
-      'Now', 'PlainDate', 'PlainTime', 'PlainDateTime', 
+      'Now', 'PlainDate', 'PlainTime', 'PlainDateTime',
       'ZonedDateTime', 'Instant', 'Duration', 'Calendar', 'TimeZone'
     ];
-    
+
     const availableFeatures = this.getAvailableFeatures();
     const missingFeatures = requiredFeatures.filter(feature => !availableFeatures.includes(feature));
-    
+
     return {
       isValid: missingFeatures.length === 0,
       missingFeatures

@@ -50,7 +50,6 @@ describe('TemporalDatePickerComponent', () => {
   });
 
   it('should handle year change', () => {
-    const initialYear = component.selectedYear();
     component.onYearChange(2024);
     expect(component.selectedYear()).toBe(2024);
   });
@@ -75,7 +74,7 @@ describe('TemporalDatePickerComponent', () => {
   it('should write value', () => {
     const date = Temporal.PlainDate.from('2023-12-25');
     component.writeValue(date);
-    
+
     expect(component.selectedYear()).toBe(2023);
     expect(component.selectedMonth()).toBe(12);
     expect(component.selectedDay()).toBe(25);
@@ -83,7 +82,7 @@ describe('TemporalDatePickerComponent', () => {
 
   it('should write null value', () => {
     component.writeValue(null);
-    
+
     const currentYear = new Date().getFullYear();
     expect(component.selectedYear()).toBe(currentYear);
   });
@@ -91,7 +90,7 @@ describe('TemporalDatePickerComponent', () => {
   it('should register onChange callback', () => {
     const callback = jasmine.createSpy('onChange');
     component.registerOnChange(callback);
-    
+
     component.onDayChange(15);
     expect(callback).toHaveBeenCalled();
   });
@@ -99,7 +98,7 @@ describe('TemporalDatePickerComponent', () => {
   it('should register onTouched callback', () => {
     const callback = jasmine.createSpy('onTouched');
     component.registerOnTouched(callback);
-    
+
     // Simulate blur event
     component['onTouched']();
     expect(callback).toHaveBeenCalled();

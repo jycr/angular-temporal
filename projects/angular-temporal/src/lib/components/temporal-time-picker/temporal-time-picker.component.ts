@@ -13,36 +13,36 @@ import { Temporal } from '../../utils/polyfill';
   template: `
     <div class="temporal-time-picker" [ngClass]="customClasses?.['container']">
       <div class="time-selectors" [ngClass]="customClasses?.['timeContainer']">
-        <select 
-          [(ngModel)]="selectedHour" 
+        <select
+          [(ngModel)]="selectedHour"
           (ngModelChange)="onTimeChange()"
           [ngClass]="customClasses?.['hourSelect']"
           class="hour-select">
           <option *ngFor="let hour of hours" [value]="hour">{{ formatHour(hour) }}</option>
         </select>
-        
+
         <span class="time-separator">:</span>
-        
-        <select 
-          [(ngModel)]="selectedMinute" 
+
+        <select
+          [(ngModel)]="selectedMinute"
           (ngModelChange)="onTimeChange()"
           [ngClass]="customClasses?.['minuteSelect']"
           class="minute-select">
           <option *ngFor="let minute of minutes" [value]="minute">{{ formatMinute(minute) }}</option>
         </select>
-        
-        <select 
+
+        <select
           *ngIf="showSeconds"
-          [(ngModel)]="selectedSecond" 
+          [(ngModel)]="selectedSecond"
           (ngModelChange)="onTimeChange()"
           [ngClass]="customClasses?.['secondSelect']"
           class="second-select">
           <option *ngFor="let second of seconds" [value]="second">{{ formatSecond(second) }}</option>
         </select>
-        
-        <select 
+
+        <select
           *ngIf="use12HourFormat"
-          [(ngModel)]="selectedPeriod" 
+          [(ngModel)]="selectedPeriod"
           (ngModelChange)="onTimeChange()"
           [ngClass]="customClasses?.['periodSelect']"
           class="period-select">
@@ -58,18 +58,18 @@ import { Temporal } from '../../utils/polyfill';
       flex-direction: column;
       gap: 0.5rem;
     }
-    
+
     .time-selectors {
       display: flex;
       gap: 0.25rem;
       align-items: center;
     }
-    
+
     .time-separator {
       font-weight: bold;
       font-size: 1.2rem;
     }
-    
+
     .hour-select,
     .minute-select,
     .second-select,
@@ -80,7 +80,7 @@ import { Temporal } from '../../utils/polyfill';
       background: white;
       font-size: 1rem;
     }
-    
+
     .hour-select:focus,
     .minute-select:focus,
     .second-select:focus,
@@ -124,8 +124,8 @@ export class TemporalTimePickerComponent implements ControlValueAccessor, OnInit
   minutes: number[] = [];
   seconds: number[] = [];
 
-  private onChange = (value: Temporal.PlainTime | null) => {};
-  private onTouched = () => {};
+  private onChange: (value: Temporal.PlainTime | null) => void = () => { /* empty */ };
+  private onTouched = () => { /* empty */ };
 
   ngOnInit(): void {
     this.config = {
@@ -166,7 +166,7 @@ export class TemporalTimePickerComponent implements ControlValueAccessor, OnInit
   private emitTimeChange(): void {
     try {
       let hour = this.selectedHour;
-      
+
       if (this.config.use12HourFormat) {
         if (this.selectedPeriod === 'AM' && hour === 12) {
           hour = 0;
@@ -180,7 +180,7 @@ export class TemporalTimePickerComponent implements ControlValueAccessor, OnInit
         minute: this.selectedMinute,
         second: this.config.showSeconds ? this.selectedSecond : 0
       });
-      
+
       this.onChange(plainTime);
       this.timeChange.emit(plainTime);
     } catch (error) {
@@ -244,6 +244,7 @@ export class TemporalTimePickerComponent implements ControlValueAccessor, OnInit
     this.onTouched = fn;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setDisabledState(isDisabled: boolean): void {
     // TODO: Implement disabled state if needed
   }

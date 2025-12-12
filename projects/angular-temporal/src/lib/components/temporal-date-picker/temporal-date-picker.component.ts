@@ -15,16 +15,16 @@ import { Temporal } from '../../utils/polyfill';
   template: `
     <div class="temporal-date-picker" [ngClass]="customClasses()?.['container']">
       <div class="date-selectors" [ngClass]="customClasses()?.['dateContainer']">
-        <select 
-          [ngModel]="selectedYear()" 
+        <select
+          [ngModel]="selectedYear()"
           (ngModelChange)="onYearChange($event)"
           [ngClass]="customClasses()?.['yearSelect']"
           class="year-select">
           <option *ngFor="let year of years()" [value]="year">{{ year }}</option>
         </select>
-        
-        <select 
-          [ngModel]="selectedMonth()" 
+
+        <select
+          [ngModel]="selectedMonth()"
           (ngModelChange)="onMonthChange($event)"
           [ngClass]="customClasses()?.['monthSelect']"
           class="month-select">
@@ -32,9 +32,9 @@ import { Temporal } from '../../utils/polyfill';
             {{ getMonthName(i + 1) }}
           </option>
         </select>
-        
-        <select 
-          [ngModel]="selectedDay()" 
+
+        <select
+          [ngModel]="selectedDay()"
           (ngModelChange)="onDayChange($event)"
           [ngClass]="customClasses()?.['daySelect']"
           class="day-select">
@@ -49,13 +49,13 @@ import { Temporal } from '../../utils/polyfill';
       flex-direction: column;
       gap: 0.5rem;
     }
-    
+
     .date-selectors {
       display: flex;
       gap: 0.5rem;
       align-items: center;
     }
-    
+
     .year-select,
     .month-select,
     .day-select {
@@ -65,7 +65,7 @@ import { Temporal } from '../../utils/polyfill';
       background: white;
       font-size: 1rem;
     }
-    
+
     .year-select:focus,
     .month-select:focus,
     .day-select:focus {
@@ -92,7 +92,7 @@ export class TemporalDatePickerComponent implements ControlValueAccessor, OnInit
   dateChange = output<Temporal.PlainDate | null>();
 
   private temporalService = inject(TemporalService);
-  
+
   selectedYear = signal<number>(new Date().getFullYear());
   selectedMonth = signal<number>(new Date().getMonth() + 1);
   selectedDay = signal<number>(new Date().getDate());
@@ -100,7 +100,7 @@ export class TemporalDatePickerComponent implements ControlValueAccessor, OnInit
     const currentYear = new Date().getFullYear();
     const minYear = this.minYear() || currentYear - 100;
     const maxYear = this.maxYear() || currentYear + 100;
-    
+
     return Array.from(
       { length: maxYear - minYear + 1 },
       (_, i) => minYear + i
@@ -121,14 +121,14 @@ export class TemporalDatePickerComponent implements ControlValueAccessor, OnInit
     calendar: this.calendar() || 'iso8601'
   }));
 
-  private onChange = (value: Temporal.PlainDate | null) => {};
-  private onTouched = () => {};
+  private onChange: (value: Temporal.PlainDate | null) => void = () => { /* empty */ };
+  private onTouched = () => { /* empty */ };
 
   ngOnInit(): void {
     effect(() => {
       const daysInMonth = this.temporalService.getDaysInMonth(this.selectedYear(), this.selectedMonth());
       const currentDay = this.selectedDay();
-      
+
       if (currentDay > daysInMonth) {
         this.selectedDay.set(daysInMonth);
       }
@@ -157,7 +157,7 @@ export class TemporalDatePickerComponent implements ControlValueAccessor, OnInit
         month: this.selectedMonth(),
         day: this.selectedDay()
       });
-      
+
       this.onChange(plainDate);
       this.dateChange.emit(plainDate);
     } catch (error) {
@@ -194,6 +194,7 @@ export class TemporalDatePickerComponent implements ControlValueAccessor, OnInit
     this.onTouched = fn;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setDisabledState(isDisabled: boolean): void {
     // TODO: Implement disabled state if needed
   }

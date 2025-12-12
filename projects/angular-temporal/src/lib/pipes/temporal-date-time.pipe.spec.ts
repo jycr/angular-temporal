@@ -42,7 +42,7 @@ describe('TemporalDateTimePipe', () => {
 
   it('should format ZonedDateTime', () => {
     const zonedDateTime = Temporal.ZonedDateTime.from('2023-12-25T14:30:45[America/New_York]');
-    const result = pipe.transform(zonedDateTime as any);
+    const result = pipe.transform(zonedDateTime as never);
     expect(typeof result).toBe('string');
     expect(result.length).toBeGreaterThan(0);
   });

@@ -1,4 +1,4 @@
-import { inject, input, Pipe, PipeTransform } from '@angular/core';
+import { inject, Pipe, PipeTransform } from '@angular/core';
 
 import { TemporalService } from '../services/temporal.service';
 import { TemporalFormatOptions } from '../types/temporal.types';

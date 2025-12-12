@@ -64,12 +64,12 @@ export interface TemporalValidationResult {
   errors: string[];
 }
 
-export type TemporalFormValue = 
-  | Temporal.PlainDate 
-  | Temporal.PlainTime 
-  | Temporal.PlainDateTime 
-  | Temporal.ZonedDateTime 
-  | null 
+export type TemporalFormValue =
+  | Temporal.PlainDate
+  | Temporal.PlainTime
+  | Temporal.PlainDateTime
+  | Temporal.ZonedDateTime
+  | null
   | undefined;
 
 export interface TemporalFormControl {
@@ -80,7 +80,7 @@ export interface TemporalFormControl {
   dirty: boolean;
 }
 
-export interface TemporalSignalConfig<T = any> {
+export interface TemporalSignalConfig<T = unknown> {
   value: Signal<T>;
   setValue: (value: T) => void;
   updateValue: (fn: (current: T) => T) => void;
@@ -99,8 +99,8 @@ export interface TemporalComponentConfig {
   customClasses: Signal<Record<string, string> | undefined>;
   customDateClasses: Signal<Record<string, string> | undefined>;
   customTimeClasses: Signal<Record<string, string> | undefined>;
-  
-  valueChange: Signal<(value: any) => void>;
+
+  valueChange: Signal<(value: unknown) => void>;
   dateChange: Signal<(value: PlainDate | null) => void>;
   timeChange: Signal<(value: PlainTime | null) => void>;
   dateTimeChange: Signal<(value: PlainDateTime | null) => void>;
@@ -110,7 +110,7 @@ export interface TemporalDirectiveConfig {
   temporalInput: Signal<'date' | 'time' | 'datetime'>;
   temporalConfig: Signal<Partial<TemporalInputConfig> | undefined>;
   temporalTimezone: Signal<string>;
-  temporalValue: Signal<any>;
+  temporalValue: Signal<unknown>;
   temporalFormat: Signal<TemporalFormatOptions | undefined>;
   temporalLocale: Signal<string | undefined>;
 }

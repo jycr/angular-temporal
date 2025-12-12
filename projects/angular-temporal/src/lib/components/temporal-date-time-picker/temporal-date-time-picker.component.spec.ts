@@ -32,9 +32,9 @@ describe('TemporalDateTimePickerComponent', () => {
   it('should handle date change', () => {
     const date = Temporal.PlainDate.from('2023-12-25');
     spyOn(component.dateTimeChange, 'emit');
-    
+
     component.onDateChange(date);
-    
+
     expect(component.selectedDate).toBe(date);
     expect(component.dateTimeChange.emit).toHaveBeenCalled();
   });
@@ -42,9 +42,9 @@ describe('TemporalDateTimePickerComponent', () => {
   it('should handle time change', () => {
     const time = Temporal.PlainTime.from('14:30:45');
     spyOn(component.dateTimeChange, 'emit');
-    
+
     component.onTimeChange(time);
-    
+
     expect(component.selectedTime).toBe(time);
     expect(component.dateTimeChange.emit).toHaveBeenCalled();
   });
@@ -52,15 +52,14 @@ describe('TemporalDateTimePickerComponent', () => {
   it('should write value with PlainDateTime', () => {
     const dateTime = Temporal.PlainDateTime.from('2023-12-25T14:30:45');
     component.writeValue(dateTime);
-    
+
     expect(component.selectedDate).toEqual(Temporal.PlainDate.from('2023-12-25'));
     expect(component.selectedTime).toEqual(Temporal.PlainTime.from('14:30:45'));
   });
 
   it('should write null value', () => {
     component.writeValue(null);
-    
-    const now = new Date();
+
     expect(component.selectedDate).toBeDefined();
     expect(component.selectedTime).toBeDefined();
   });
@@ -68,7 +67,7 @@ describe('TemporalDateTimePickerComponent', () => {
   it('should register onChange callback', () => {
     const callback = jasmine.createSpy('onChange');
     component.registerOnChange(callback);
-    
+
     component.onDateChange(Temporal.PlainDate.from('2023-12-25'));
     expect(callback).toHaveBeenCalled();
   });
@@ -76,7 +75,7 @@ describe('TemporalDateTimePickerComponent', () => {
   it('should register onTouched callback', () => {
     const callback = jasmine.createSpy('onTouched');
     component.registerOnTouched(callback);
-    
+
     // Simulate blur event
     component['onTouched']();
     expect(callback).toHaveBeenCalled();
@@ -86,11 +85,11 @@ describe('TemporalDateTimePickerComponent', () => {
     const date = Temporal.PlainDate.from('2023-12-25');
     const time = Temporal.PlainTime.from('14:30:45');
     spyOn(component.dateTimeChange, 'emit');
-    
+
     component.selectedDate = date;
     component.selectedTime = time;
     component.onDateChange(date); // This will trigger emitDateTimeChange internally
-    
+
     const expectedDateTime = Temporal.PlainDateTime.from('2023-12-25T14:30:45');
     expect(component.dateTimeChange.emit).toHaveBeenCalledWith(expectedDateTime);
   });
@@ -104,7 +103,7 @@ describe('TemporalDateTimePickerComponent', () => {
     component.use12HourFormat = true;
     component.minuteStep = 15;
     component.secondStep = 10;
-    
+
     expect(component.minYear).toBe(2020);
     expect(component.maxYear).toBe(2030);
     expect(component.locale).toBe('fr-FR');
@@ -119,11 +118,11 @@ describe('TemporalDateTimePickerComponent', () => {
     const customClasses = { container: 'custom-container' };
     const customDateClasses = { container: 'custom-date' };
     const customTimeClasses = { container: 'custom-time' };
-    
+
     component.customClasses = customClasses;
     component.customDateClasses = customDateClasses;
     component.customTimeClasses = customTimeClasses;
-    
+
     expect(component.customClasses).toBe(customClasses);
     expect(component.customDateClasses).toBe(customDateClasses);
     expect(component.customTimeClasses).toBe(customTimeClasses);

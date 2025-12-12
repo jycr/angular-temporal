@@ -47,7 +47,7 @@ describe('TemporalInstantPipe', () => {
 
   it('should format with options', () => {
     const instant = Temporal.Instant.from('2023-12-25T14:30:45Z');
-    const result = pipe.transform(instant, undefined, { dateStyle: 'full', timeStyle: 'medium' } as any);
+    const result = pipe.transform(instant, undefined, { dateStyle: 'full', timeStyle: 'medium' } as never);
     expect(typeof result).toBe('string');
     expect(result.length).toBeGreaterThan(0);
   });

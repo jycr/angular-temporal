@@ -1,7 +1,7 @@
 import { computed, Injectable, signal } from '@angular/core';
 
 import {
-    TemporalComparisonResult, TemporalFormatOptions, TemporalFormValue, TemporalRange,
+    TemporalComparisonResult, TemporalFormatOptions, TemporalRange,
     TemporalServiceConfig, TemporalValidationResult
 } from '../types/temporal.types';
 import { Temporal, temporalPolyfill } from '../utils/polyfill';
@@ -24,7 +24,7 @@ export class TemporalService {
     if (!temporalPolyfill.isAvailable()) {
       console.warn('Temporal polyfill is not available. Some features may not work correctly.');
     }
-    
+
     const validation = temporalPolyfill.validateFeatures();
     if (!validation.isValid) {
       console.warn('Missing Temporal features:', validation.missingFeatures);
@@ -50,7 +50,7 @@ export class TemporalService {
       plainDate: () => Temporal.Now.plainDate(this.defaultCalendar()),
       plainTime: () => Temporal.Now.plainTimeISO(),
       plainDateTime: () => Temporal.Now.plainDateTime(this.defaultCalendar()),
-      zonedDateTime: (timezone = this.defaultTimezone()) => 
+      zonedDateTime: (timezone = this.defaultTimezone()) =>
         Temporal.Now.zonedDateTime(this.defaultCalendar(), timezone)
     };
   }
@@ -104,7 +104,7 @@ export class TemporalService {
   toZonedDateTime(value: string | Date | number | Temporal.ZonedDateTime, timezone?: string): Temporal.ZonedDateTime {
     const tz = timezone || this.defaultTimezone();
     const calendar = this.defaultCalendar();
-    
+
     if (value instanceof Temporal.ZonedDateTime) {
       return value.withTimeZone(tz);
     }
@@ -206,7 +206,7 @@ export class TemporalService {
     return date1.until(date2).total({ unit: 'seconds' });
   }
 
-  isValidDate(value: any): boolean {
+  isValidDate(value: never): boolean {
     try {
       this.toPlainDate(value);
       return true;
@@ -215,7 +215,7 @@ export class TemporalService {
     }
   }
 
-  isValidTime(value: any): boolean {
+  isValidTime(value: never): boolean {
     try {
       this.toPlainTime(value);
       return true;
@@ -224,7 +224,7 @@ export class TemporalService {
     }
   }
 
-  isValidDateTime(value: any): boolean {
+  isValidDateTime(value: never): boolean {
     try {
       this.toPlainDateTime(value);
       return true;
@@ -233,9 +233,9 @@ export class TemporalService {
     }
   }
 
-  validate(value: any, type: 'date' | 'time' | 'datetime'): TemporalValidationResult {
+  validate(value: never, type: 'date' | 'time' | 'datetime'): TemporalValidationResult {
     const errors: string[] = [];
-    
+
     try {
       switch (type) {
         case 'date':
@@ -271,7 +271,7 @@ export class TemporalService {
     locale?: string
   ): string {
     const formatLocale = locale || this.defaultLocale();
-    
+
     if (value instanceof Temporal.PlainDate) {
       return value.toLocaleString(formatLocale, options);
     }
@@ -287,7 +287,7 @@ export class TemporalService {
     if (value instanceof Temporal.Duration) {
       return value.toString();
     }
-    
+
     return String(value);
   }
 

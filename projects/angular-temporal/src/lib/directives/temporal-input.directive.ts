@@ -31,8 +31,8 @@ export class TemporalInputDirective implements ControlValueAccessor, OnInit, OnD
     calendar: 'iso8601'
   };
 
-  private onChange = (value: TemporalFormValue) => {};
-  private onTouched = () => {};
+  private onChange: (value: TemporalFormValue) => void = () => { /* empty */ };
+  private onTouched = () => { /* empty */ };
 
   ngOnInit(): void {
     this.config = { ...this.config, ...this.temporalConfig };
@@ -40,13 +40,14 @@ export class TemporalInputDirective implements ControlValueAccessor, OnInit, OnD
     this.setupEventListeners();
   }
 
+  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnDestroy(): void {
     // TODO: Add cleanup if needed
   }
 
   private setupInputType(): void {
     const element = this.elementRef.nativeElement;
-    
+
     switch (this.config.type) {
       case 'date':
         element.type = 'date';
@@ -62,7 +63,7 @@ export class TemporalInputDirective implements ControlValueAccessor, OnInit, OnD
 
   private setupEventListeners(): void {
     const element = this.elementRef.nativeElement;
-    
+
     element.addEventListener('input', this.handleInput.bind(this));
     element.addEventListener('blur', this.handleBlur.bind(this));
   }
@@ -70,7 +71,7 @@ export class TemporalInputDirective implements ControlValueAccessor, OnInit, OnD
   private handleInput(event: Event): void {
     const element = event.target as HTMLInputElement;
     const value = element.value;
-    
+
     if (!value) {
       this.onChange(null);
       return;
@@ -78,7 +79,7 @@ export class TemporalInputDirective implements ControlValueAccessor, OnInit, OnD
 
     try {
       let temporalValue: TemporalFormValue;
-      
+
       switch (this.config.type) {
         case 'date':
           temporalValue = Temporal.PlainDate.from(value);
@@ -92,7 +93,7 @@ export class TemporalInputDirective implements ControlValueAccessor, OnInit, OnD
         default:
           temporalValue = null;
       }
-      
+
       this.onChange(temporalValue);
     } catch (error) {
       console.warn('TemporalInputDirective: Invalid input value', error);
@@ -112,13 +113,13 @@ export class TemporalInputDirective implements ControlValueAccessor, OnInit, OnD
 
     try {
       let stringValue: string;
-      
+
       switch (this.config.type) {
         case 'date':
           if (value instanceof Temporal.PlainDate) {
             stringValue = value.toString();
           } else {
-            const date = this.temporalService.toPlainDate(value as any);
+            const date = this.temporalService.toPlainDate(value as never);
             stringValue = date.toString();
           }
           break;
@@ -126,7 +127,7 @@ export class TemporalInputDirective implements ControlValueAccessor, OnInit, OnD
           if (value instanceof Temporal.PlainTime) {
             stringValue = value.toString();
           } else {
-            const time = this.temporalService.toPlainTime(value as any);
+            const time = this.temporalService.toPlainTime(value as never);
             stringValue = time.toString();
           }
           break;
@@ -134,14 +135,14 @@ export class TemporalInputDirective implements ControlValueAccessor, OnInit, OnD
           if (value instanceof Temporal.PlainDateTime) {
             stringValue = value.toString().replace('T', 'T').substring(0, 16);
           } else {
-            const dateTime = this.temporalService.toPlainDateTime(value as any);
+            const dateTime = this.temporalService.toPlainDateTime(value as never);
             stringValue = dateTime.toString().replace('T', 'T').substring(0, 16);
           }
           break;
         default:
           stringValue = '';
       }
-      
+
       this.elementRef.nativeElement.value = stringValue;
     } catch (error) {
       console.warn('TemporalInputDirective: Error writing value', error);
