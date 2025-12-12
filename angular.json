@@ -28,7 +28,10 @@
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "tsConfig": "projects/angular-temporal/tsconfig.spec.json",
-            "polyfills": ["zone.js", "zone.js/testing"]
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
           }
         },
         "lint": {
@@ -37,7 +40,8 @@
             "lintFilePatterns": [
               "projects/angular-temporal/**/*.ts",
               "projects/angular-temporal/**/*.html"
-            ]
+            ],
+            "eslintConfig": "projects/angular-temporal/eslint.config.js"
           }
         }
       }
